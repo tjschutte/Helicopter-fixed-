@@ -144,9 +144,19 @@ public class HelicopterRunner extends JApplet implements ActionListener, KeyList
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        p1.Move(SPEED);
+    	float wanted = 0.01666667f;
+        double elapsed = 0;
+        double prevTime= System.nanoTime();
+    	p1.Move(SPEED);
         checkCollision();
         repaint();
+        while (true){
+        	double currentTime = System.nanoTime();
+        	elapsed = currentTime - prevTime;
+        	if ((elapsed / 1000000000) >= wanted)
+        		break;
+        }
+        System.out.println("FPS: " + (1000000000 / elapsed));
     }
 
     @Override
