@@ -4,10 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-/**
- *
- * @author Tom
- */
 public class Tile {
     public static final int TILE_SIZE = 32;
     

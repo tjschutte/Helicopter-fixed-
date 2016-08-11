@@ -2,7 +2,6 @@ package schutte;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,10 +10,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JApplet;
 import javax.swing.Timer;
 
-/*
- *
- * @author Tom
- */
+@SuppressWarnings("serial")
 public class HelicopterRunner extends JApplet implements ActionListener, KeyListener {
 
     int map[][] = {
@@ -45,7 +41,7 @@ public class HelicopterRunner extends JApplet implements ActionListener, KeyList
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 0,},};
     final int TILE_SIZE = Tile.TILE_SIZE;
     final int APPLET_WIDTH = 800;
-    final int APPLET_HEIGHT = (600);
+    final int APPLET_HEIGHT = 600;
     private Image offScreen;
     private Graphics buffer;
     private Timer timer;
@@ -63,7 +59,7 @@ public class HelicopterRunner extends JApplet implements ActionListener, KeyList
         offScreen = createImage(TILE_SIZE * map[0].length, TILE_SIZE * map.length);
         buffer = offScreen.getGraphics();
         addKeyListener(this);
-        p1 = new Helicopter(TILE_SIZE, 192);
+        p1 = new Helicopter(TILE_SIZE, 192, GRAVITY, VERT_SPEED);
 
         for (int r = 0; r < map.length; r++) {
             for (int c = 0; c < map[r].length; c++) {
@@ -147,7 +143,10 @@ public class HelicopterRunner extends JApplet implements ActionListener, KeyList
     	float wanted = 0.01666667f;
         double elapsed = 0;
         double prevTime= System.nanoTime();
+        //moves us in the x direction
     	p1.Move(SPEED);
+    	//applies gravity to the situation ;)
+    	p1.setVertSpeed(GRAVITY);
         checkCollision();
         repaint();
         while (true){
@@ -168,21 +167,21 @@ public class HelicopterRunner extends JApplet implements ActionListener, KeyList
         int key = e.getKeyCode();
 
         switch (key) {
+        	case KeyEvent.VK_SPACE:
+        		p1.setVertSpeed(VERT_SPEED);
+        		break;
             case KeyEvent.VK_D:
                 p1.setSpeed(SPEED);
                 break;
             case KeyEvent.VK_A:
                 p1.setSpeed(-SPEED);
                 break;
-            case KeyEvent.VK_SPACE:
-                p1.setVertSpeed(VERT_SPEED);
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-
         switch (key) {
             case KeyEvent.VK_D:
                 p1.setSpeed(0);
@@ -190,8 +189,6 @@ public class HelicopterRunner extends JApplet implements ActionListener, KeyList
             case KeyEvent.VK_A:
                 p1.setSpeed(0);
                 break;
-            case KeyEvent.VK_SPACE:
-                p1.setVertSpeed(GRAVITY);
         }
     }
 }

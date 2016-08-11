@@ -19,6 +19,8 @@ public class Helicopter {
     private double xSpeed;
     private double x;
     private double y;
+    private final double GRAV;
+    private final double CLIMB;
     public static BufferedImage heli;
 
     static {
@@ -29,9 +31,11 @@ public class Helicopter {
         }
     }
 
-    public Helicopter(int x, int y) {
+    public Helicopter(double x, double y, double grav, double climb) {
         this.x = x;
         this.y = y;
+        this.GRAV = grav;
+        this.CLIMB = climb;
     }
 
     public void Move(int speed) {
@@ -48,7 +52,17 @@ public class Helicopter {
     }
 
     public void setVertSpeed(double speed) {
-        ySpeed = speed;
+        if (speed == GRAV){
+        	if (this.ySpeed < GRAV){
+        		ySpeed += 0.02;
+        	}
+        } else if (speed == CLIMB) {
+			if (ySpeed > CLIMB){
+				ySpeed -= 0.1;
+			}
+		} else if (speed == 0){
+			ySpeed = 0;
+		}
     }
     
     public int getX(){
@@ -61,6 +75,5 @@ public class Helicopter {
 
     public void draw(Graphics g) {
         g.drawImage(heli, (int) x, (int) y, null);
-
     }
 }
